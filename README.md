@@ -52,7 +52,7 @@ either in ide or run from cli maven (mvnw)
 ./mvnw clean test
 ./mvnw  -Dit.test=Wproject1RestAssuredIT verify
 
-## Deploying the application to OpenShift
+## Deploying the application
 
 
 ## Copyright

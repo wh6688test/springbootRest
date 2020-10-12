@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #  wsproject1 : sample springboot application
 Minimal [Spring Boot](http://projects.spring.io/spring-boot/) sample app.
 
@@ -57,3 +58,6 @@ either in ide or run from cli maven (mvnw)
 
 ## Copyright
 
+=======
+# springbootRest
+spring boot rest api and associated test samples

@@ -3,7 +3,6 @@ package org.tutorials.wproject1.model;
 import java.util.Objects;
 
 public class Member {
-    //private String id;
     private String id;
     private short rating;
 

@@ -8,7 +8,7 @@ public class GroupAttr {
         this.attributes=new HashMap<>();
     }
 
-    public GroupAttr(Map attributes) {
+    public GroupAttr(Map<String, String> attributes) {
         this.attributes=new HashMap<>();
         this.attributes.putAll(attributes);
     }

@@ -12,8 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.tutorials.wproject1.testing.JsonUtil;
 
-
-
 import org.springframework.http.MediaType;
 import org.tutorials.wproject1.controller.Wproject1Controller;
 import org.tutorials.wproject1.model.Group;
@@ -60,7 +58,7 @@ public class Wproject1ControllerTest {
 
 	@Test
 	void whenPostGroupThenGroupPosted200() throws Exception {
-		Map attr=new HashMap<String, String>();
+		Map<String, String> attr=new HashMap<>();
 		attr.put("att", "value");
 		Group postedGroup=new Group(1L, attr);
 		given(service.createGroup(attr)).willReturn(postedGroup);
@@ -72,7 +70,7 @@ public class Wproject1ControllerTest {
 	@Test
 	void whenGetAllGroupsThenReturnJsonArray() throws Exception {
 
-		Map attr1Map=new HashMap<String, String>();
+		Map<String, String> attr1Map=new HashMap<>();
 		attr1Map.put("attr1", "value1");
 
 
@@ -81,7 +79,7 @@ public class Wproject1ControllerTest {
 		Group grp1 = new Group(new Long(2), attr1Map);
 		Group grp2 = new Group(new Long(3), attr1Map, member1);
 
-		List<Group> allGroups=new ArrayList();
+		List<Group> allGroups=new ArrayList<>();
 		allGroups.add(grp0);
 		allGroups.add(grp1);
 		allGroups.add(grp2);
@@ -94,8 +92,6 @@ public class Wproject1ControllerTest {
 		        .andExpect(jsonPath("$[2].members", hasKey("2")))
 				.andExpect(jsonPath("$[2].members.2.rating", is(4)));
 
-
-
 		verify(service, VerificationModeFactory.times(1)).findAll();
 		reset(service);
 	}
@@ -103,14 +99,14 @@ public class Wproject1ControllerTest {
 	@Test
 	void whenGetSpecificGroupThenReturnTheGroup200() throws Exception {
 
-		Map attr1Map=new HashMap<String, String>();
+		Map<String, String> attr1Map=new HashMap<String, String>();
 		attr1Map.put("attr1", "value1");
 		Member member1= new Member("1", (short)5);
 		Group grp0=new Group(1L);
 		Group grp1 = new Group(2L, attr1Map);
 		Group grp2 = new Group(3L, attr1Map, member1);
 
-		List<Group> allGroups=new ArrayList();
+		List<Group> allGroups=new ArrayList<>();
 		allGroups.add(grp0);
 		allGroups.add(grp1);
 		allGroups.add(grp2);
@@ -127,7 +123,7 @@ public class Wproject1ControllerTest {
 	@Test
 	void whenUpdateGroupMemberThenReturnUpdatedGroup200() throws Exception {
 
-		Map attr1Map=new HashMap<String, String>();
+		Map<String, String> attr1Map=new HashMap<>();
 		attr1Map.put("attr1", "value1");
 		Member member1= new Member("1", (short)2);
 		Member member2= new Member("2", (short)3);
@@ -135,7 +131,7 @@ public class Wproject1ControllerTest {
 		Group grp1 = new Group(new Long(2), attr1Map, member1);
 		Group grp2 = new Group(new Long(2), attr1Map, member2);
 
-		Set<Group> allGroups=new HashSet();
+		Set<Group> allGroups=new HashSet<>();
 		allGroups.add(grp1);
 
 		given(service.updateGroupMember(2L, member2)).willReturn(Optional.of(grp2));
@@ -153,7 +149,7 @@ public class Wproject1ControllerTest {
 	@Test
 	void whenGetSpecificMemberThenReturnContainingGroups() throws Exception {
 
-		Map attr1Map=new HashMap<String, String>();
+		Map<String, String> attr1Map=new HashMap<>();
 		attr1Map.put("attr1", "value1");
 
 
@@ -162,12 +158,12 @@ public class Wproject1ControllerTest {
 		Group grp1 = new Group(new Long(2), attr1Map);
 		Group grp2 = new Group(new Long(3), attr1Map, member1);
 
-		List<Group> allGroups=new ArrayList();
+		List<Group> allGroups=new ArrayList<>();
 		allGroups.add(grp0);
 		allGroups.add(grp1);
 		allGroups.add(grp2);
 
-		List<Group>returnedGroups=new ArrayList();
+		List<Group>returnedGroups=new ArrayList<>();
 		returnedGroups.add(grp2);
 
 		given(service.findMemberById("1")).willReturn(Optional.of(returnedGroups));
@@ -175,13 +171,13 @@ public class Wproject1ControllerTest {
 		mvc.perform(get("/wrest/group/member/{memberId}", "1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 			.andExpect(jsonPath("$[0].members", hasKey("1"))).andExpect(jsonPath("$[0].members.1.rating", is(5)));
 
-		//403 Not Found
-		mvc.perform(get("/wrest/group/member/{memberId}", "member2").contentType(MediaType.APPLICATION_JSON))
-				.andDo(print()).andExpect(status().isNotFound());
-
+		//note : updated the controller to return Optional intead of NotFound : means empty result will be returned instead
+		mvc.perform(get("/wrest/group/member/{memberId}", "member22").contentType(MediaType.APPLICATION_JSON))
+		   //.andDo(print()).andExpect(status().isNotFound());
+		   .andDo(print()).andExpect(jsonPath("$").doesNotExist());
 
 		verify(service, VerificationModeFactory.times(1)).findMemberById("1");
-		verify(service, VerificationModeFactory.times(1)).findMemberById("member2");
+		verify(service, VerificationModeFactory.times(1)).findMemberById("member22");
 		reset(service);
 
 	}
@@ -190,13 +186,12 @@ public class Wproject1ControllerTest {
 	@Test
 	void whenDeleteGroupReturn204() throws Exception {
 
-		Map attr1Map=new HashMap<String, String>();
+		Map<String, String> attr1Map=new HashMap<>();
 		attr1Map.put("attr1", "value1");
-
 
 		Group grp1=new Group(1L, attr1Map);
 
-		List<Group> allGroups=new ArrayList();
+		List<Group> allGroups=new ArrayList<>();
 		allGroups.add(grp1);
 
 		when(service.createGroup(attr1Map)).thenCallRealMethod();
@@ -204,7 +199,7 @@ public class Wproject1ControllerTest {
 	    doAnswer(invocation -> {
 	    	Object arg0 = invocation.getArgument(0);
 	    	assertEquals(grp1, arg0);
-	    	assertEquals(grp1.getGid(), 1L);
+	    	assertEquals(1L, grp1.getGid());
 	    	return null;
 
 		}).when(service).deleteGroup(grp1);

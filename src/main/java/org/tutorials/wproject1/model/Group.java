@@ -12,7 +12,7 @@ import java.util.Objects;
 public class Group {
 
     @NotNull
-    private Long gid;
+    private long gid;
     private Map<String, String> attributes;
     private Map<String, Member>members;
 
